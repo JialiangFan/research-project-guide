@@ -36,16 +36,71 @@ runs/   experiment outputs, training results, evaluation results, and metrics
 
 ## Recommended Project Layout / 推荐项目结构
 
+Minimal recommended layout:
+
+最小推荐结构：
+
 ```text
 project/
+  README.md
   docs/
   src/
   scripts/
   configs/
   runs/
   tests/
-  README.md
 ```
+
+Full recommended layout:
+
+完整推荐结构：
+
+```text
+project/
+  README.md
+  docs/
+  src/
+  scripts/
+  configs/
+  runs/
+  data/
+  tests/
+  tools/
+  notebooks/
+  assets/
+```
+
+## Directory Responsibilities / 目录职责
+
+- `README.md`: project overview, quick start, main commands, and links to important docs.
+- `docs/`: experiment specifications, task breakdowns, design decisions, status tracking, and blockers. See [Docs Management Guide](docs-management.en.md) / [Docs 管理指南](docs-management.zh.md).
+- `src/`: reusable source code, including methods, models, environment adapters, training logic, evaluation logic, metrics, and utilities.
+- `scripts/`: thin command-line entry points, such as training, evaluation, leaderboard generation, and maintenance scripts.
+- `configs/`: reusable configuration files for training, evaluation, models, environments, and backends.
+- `runs/`: experiment outputs, including configs, checkpoints, logs, metrics, raw evaluation results, and artifacts. See [Runs Management Guide](runs-management.en.md) / [Runs 管理指南](runs-management.zh.md).
+- `data/`: dataset metadata, manifests, download scripts, small examples, and format documentation. Large datasets should usually not be committed to git.
+- `tests/`: focused tests for configs, path conventions, metrics, data formats, checkpoint loading, and smoke runs.
+- `tools/`: utility scripts for result aggregation, validation, conversion, cleanup, and project maintenance.
+- `notebooks/`: exploratory analysis and visualization. Stable logic should be moved into `src/`, `scripts/`, or `tools/`.
+- `assets/`: figures, diagrams, demo images, GIFs, and README or paper-facing visual assets.
+
+中文说明：
+
+- `README.md`：项目概览、快速开始、主要命令和重要文档链接。
+- `docs/`：实验 specification、任务拆分、设计决策、完成状态和 blocker。具体规范见 [Docs 管理指南](docs-management.zh.md) / [Docs Management Guide](docs-management.en.md)。
+- `src/`：可复用核心代码，包括方法、模型、环境 adapter、训练逻辑、评测逻辑、metrics 和工具函数。
+- `scripts/`：轻量命令行入口，例如训练、评测、leaderboard 生成和维护脚本。
+- `configs/`：训练、评测、模型、环境和 backend 的配置文件。
+- `runs/`：实验输出，包括 config、checkpoint、日志、metrics、原始评测结果和 artifacts。具体规范见 [Runs 管理指南](runs-management.zh.md) / [Runs Management Guide](runs-management.en.md)。
+- `data/`：数据集元信息、manifest、下载脚本、小样例和格式说明。大数据通常不应该直接提交到 git。
+- `tests/`：针对 config、路径规范、metrics、数据格式、checkpoint loading 和 smoke run 的重点测试。
+- `tools/`：结果汇总、校验、格式转换、清理和项目维护工具。
+- `notebooks/`：探索性分析和可视化。稳定逻辑应该沉淀到 `src/`、`scripts/` 或 `tools/`。
+- `assets/`：图片、架构图、demo 图、GIF，以及 README 或论文中使用的视觉素材。
+
+Avoid creating separate top-level `outputs/`, `results/`, `logs/`, or `checkpoints/` directories unless there is a strong reason. These usually belong under `runs/`.
+
+除非有明确原因，不建议额外创建顶层 `outputs/`、`results/`、`logs/` 或 `checkpoints/` 目录。这些内容通常应该归到 `runs/` 下面。
 
 ## Workflow / 工作方式
 
