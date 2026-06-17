@@ -12,6 +12,15 @@ A `run_id` should represent one reproducible experiment artifact, including the 
 
 To avoid overly deep directory structures, do not split simulator, environment, model, and seed into many directory levels. Use a relatively flat directory structure and store complete metadata in config files.
 
+`run_config.json` (and each evaluation's `eval_config.json`) is the **single source of truth for reproduction**. A command alone is not enough to reproduce a run, so the config must also include all four of the following:
+
+- **command**: the exact, copy-paste runnable command that was actually executed;
+- **git_commit**: the code version that produced the result (a commit or tag, flagged dirty or not) — the anchor for reproduction;
+- **env**: the runtime environment, such as the python version, key package versions, and GPU, or a pointer to an environment snapshot file in the run directory;
+- **data**: the input dataset path and version/hash.
+
+`experiment_results.md` under `docs/` does not duplicate this information; it only points to the relevant run's config path.
+
 ## Recommended Structure
 
 ```text
@@ -64,7 +73,7 @@ The `run_id` is only a quick identifier. It should not be the only source of met
 
 ## run_config.json
 
-Each run directory must contain `run_config.json`.
+Each run directory must contain `run_config.json`. It describes the complete information for the run and serves as the single source of truth for reproduction.
 
 Example:
 
@@ -78,9 +87,35 @@ Example:
   "env_name": "pick_place",
   "seed": 0,
   "created_at": "2026-06-12T15:30:00",
+
+  "command": "python scripts/train.py --config configs/icrl_pickplace.yaml --seed 0 --run_id 20260612_1530_isaacgym_dp_pickplace_s0",
+  "git_commit": "a1b2c3d4",
+  "git_dirty": false,
+  "git_branch": "main",
+  "env": {
+    "python": "3.10.13",
+    "key_packages": {"torch": "2.3.0", "isaacgym": "1.0rc4"},
+    "gpu": "1x A100 80GB",
+    "snapshot": "env.txt"
+  },
+  "data": {
+    "name": "expert_pickplace",
+    "path": "data/expert/pickplace_v2",
+    "version": "v2",
+    "hash": "sha256:0f1e2d..."
+  },
   "notes": ""
 }
 ```
+
+The following four fields are **mandatory** for reproduction:
+
+- `command`: the exact command that was executed; it must be copy-paste runnable, with no `...` placeholders;
+- `git_commit` / `git_dirty` / `git_branch`: the code version that produced the result; if `git_dirty` is `true`, there were uncommitted changes and reproduction is not guaranteed to match — avoid this;
+- `env`: python version, key dependencies, and GPU; `snapshot` points to the environment snapshot file in the run directory (see below);
+- `data`: the input data path and version/hash.
+
+In addition, each run directory should store an **environment snapshot file** (e.g. `env.txt`, produced by `pip freeze` or `conda env export`) for exact reproduction.
 
 For very different execution environments such as MVP, simulator, and real-world, use fields like:
 
@@ -193,9 +228,16 @@ Example:
   "checkpoint": "checkpoints/ckpt100.pt",
   "seed": 1,
   "noise_level": 0.1,
-  "num_episodes": 100
+  "num_episodes": 100,
+
+  "command": "python scripts/eval.py --run_dir runs/icrl/20260612_1530_isaacgym_dp_pickplace_s0 --eval_type robustness --noise_level 0.1 --num_episodes 100 --seed 1",
+  "git_commit": "a1b2c3d4",
+  "git_dirty": false,
+  "env": {"python": "3.10.13", "snapshot": "env.txt"}
 }
 ```
+
+An evaluation must also record its own `command`, `git_commit`, and `env`, because it may run at a different code version or environment than training. The `checkpoint` field records the evaluated input.
 
 ### metrics.json
 
@@ -254,7 +296,7 @@ An evaluation script should:
 2. read `run_config.json`;
 3. generate a unique `eval_id` from evaluation parameters;
 4. create `runs/<method>/<run_id>/eval/<eval_id>/`;
-5. write `eval_config.json`;
+5. write `eval_config.json` (must include this eval's `command`, `git_commit`, and `env`);
 6. write `metrics.json`;
 7. save raw evaluation result files.
 

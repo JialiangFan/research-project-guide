@@ -110,8 +110,8 @@ Recommended workflow:
 2. Break the experiment into concrete sub-tasks.
 3. Describe each task in a standalone markdown file.
 4. Implement the code against the specification.
-5. Save experiment outputs under `runs/`.
-6. Update the documentation with actual code paths, commands, and result paths.
+5. Run experiments; the scripts write each run's full reproduction info (command, code version, environment, data) into `run_config.json` under `runs/`.
+6. Update `docs/` to point at the results: register run directories and metrics in `experiment_results.md`, and update the project README status.
 
 推荐工作方式：
 
@@ -119,8 +119,8 @@ Recommended workflow:
 2. 把大实验拆成多个 sub-task；
 3. 每个 task 用独立 markdown 文件描述；
 4. 根据 specification 实现代码；
-5. 实验结果统一写入 `runs/`；
-6. 最后把实际代码路径、运行命令和结果路径回填到文档中。
+5. 跑实验；脚本把每次 run 的完整复现信息（命令、代码版本、环境、数据）写入 `runs/` 下的 `run_config.json`；
+6. 回填 `docs/`：在 `实验结果.md` 登记 run 目录和指标，并更新项目 README 的状态。
 
 ## Design Goal / 设计目标
 

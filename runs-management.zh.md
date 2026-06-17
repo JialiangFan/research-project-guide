@@ -12,6 +12,15 @@
 
 为了避免目录结构过深，不建议把 simulator、env、model、seed 等信息全部拆成目录层级。推荐使用较扁平的目录结构，并将完整元信息写入 config 文件。
 
+`run_config.json`（以及每次评测的 `eval_config.json`）是**复现的单一 source of truth**。复现一次实验只靠命令是不够的，因此 config 必须同时包含以下四样：
+
+- **command**：本次实际执行的完整、可直接粘贴运行的命令；
+- **git_commit**：产生该结果时的代码版本（commit 或 tag，并标记是否 dirty），这是复现的锚点；
+- **env**：运行环境，例如 python 版本、关键依赖版本、GPU，或指向 run 目录下的环境快照文件；
+- **data**：使用的数据集路径与版本/hash。
+
+`docs/` 里的 `实验结果.md` 不重复抄这些信息，只指向对应 run 的 config 路径即可。
+
 ## 推荐目录结构
 
 ```text
@@ -64,7 +73,7 @@ runs/
 
 ## run_config.json
 
-每个 run 目录下必须包含 `run_config.json`，用于描述这次实验的完整信息。
+每个 run 目录下必须包含 `run_config.json`，用于描述这次实验的完整信息，并作为复现的单一 source of truth。
 
 示例：
 
@@ -78,9 +87,35 @@ runs/
   "env_name": "pick_place",
   "seed": 0,
   "created_at": "2026-06-12T15:30:00",
+
+  "command": "python scripts/train.py --config configs/icrl_pickplace.yaml --seed 0 --run_id 20260612_1530_isaacgym_dp_pickplace_s0",
+  "git_commit": "a1b2c3d4",
+  "git_dirty": false,
+  "git_branch": "main",
+  "env": {
+    "python": "3.10.13",
+    "key_packages": {"torch": "2.3.0", "isaacgym": "1.0rc4"},
+    "gpu": "1x A100 80GB",
+    "snapshot": "env.txt"
+  },
+  "data": {
+    "name": "expert_pickplace",
+    "path": "data/expert/pickplace_v2",
+    "version": "v2",
+    "hash": "sha256:0f1e2d..."
+  },
   "notes": ""
 }
 ```
+
+其中以下四个字段为**必含**，用于复现：
+
+- `command`：本次实际执行的完整命令，必须可直接复制粘贴运行，不能留 `...` 占位；
+- `git_commit` / `git_dirty` / `git_branch`：产生该结果的代码版本；若 `git_dirty` 为 `true`，说明有未提交改动，复现不保证一致，应尽量避免；
+- `env`：python 版本、关键依赖、GPU；`snapshot` 指向 run 目录下的环境快照文件（见下）；
+- `data`：输入数据的路径与版本/hash。
+
+此外，每个 run 目录下应保存一份**环境快照文件**（例如 `env.txt`，由 `pip freeze` 或 `conda env export` 生成），供精确复现使用。
 
 对于 MVP、simulator、real-world 这类差异很大的环境，建议使用：
 
@@ -193,9 +228,16 @@ raw_results/
   "checkpoint": "checkpoints/ckpt100.pt",
   "seed": 1,
   "noise_level": 0.1,
-  "num_episodes": 100
+  "num_episodes": 100,
+
+  "command": "python scripts/eval.py --run_dir runs/icrl/20260612_1530_isaacgym_dp_pickplace_s0 --eval_type robustness --noise_level 0.1 --num_episodes 100 --seed 1",
+  "git_commit": "a1b2c3d4",
+  "git_dirty": false,
+  "env": {"python": "3.10.13", "snapshot": "env.txt"}
 }
 ```
+
+eval 同样要记录自己的 `command`、`git_commit`、`env`，因为评测可能在与训练不同的代码版本或环境下运行。`checkpoint` 字段记录被评测的输入。
 
 ### metrics.json
 
@@ -254,7 +296,7 @@ eval 脚本运行时必须：
 2. 读取该 run 下的 `run_config.json`；
 3. 根据本次 eval 参数生成唯一的 `eval_id`；
 4. 创建 `runs/<method>/<run_id>/eval/<eval_id>/`；
-5. 写入 `eval_config.json`；
+5. 写入 `eval_config.json`（必须包含本次 eval 的 `command`、`git_commit`、`env`）；
 6. 写入 `metrics.json`；
 7. 保存原始评测结果文件。
 
