@@ -167,6 +167,28 @@ Code paths:
 
 列出这个 task 关心的指标并**给出定义**，例如 success_rate（成功 episode 数 / 总 episode 数）、mean_return、violation_rate、mean_cost、num_episodes 等。指标定义要稳定，方便跨 run 比较。
 
+## Deliverables
+
+> **Status 为 Done 时必须填写此节。**
+
+产出文件：
+
+- `runs/icrl/<run_id>/checkpoints/best.pt` — 最优 checkpoint
+- `runs/icrl/<run_id>/eval/<eval_id>/metrics.json` — 评测指标
+
+产出命令（生成上述文件的实际 shell 命令）：
+
+```bash
+python scripts/train.py --config configs/icrl_pickplace.yaml --seed 0
+```
+
+验证命令（查看 / 验证交付结果）：
+
+```bash
+python scripts/eval.py --run_dir runs/icrl/<run_id> --eval_type success
+cat runs/icrl/<run_id>/eval/<eval_id>/metrics.json
+```
+
 ## Acceptance Criteria
 
 这个 task 只有满足以下条件才算完成：
@@ -176,6 +198,7 @@ Code paths:
 - [ ] 结果写入正确的 `runs/` 目录，并在 `实验结果.md` 登记
 - [ ] 生成必要的 config 文件和 `metrics.json`
 - [ ] 主要结果已经检查过，并标注是否达到 Success Criteria
+- [ ] Deliverables 已填写（产出文件路径、产出命令、验证命令）
 
 ## Blockers
 

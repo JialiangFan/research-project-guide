@@ -168,6 +168,28 @@ If new files are needed, list them explicitly.
 
 List the metrics that matter for this task and **define them**, such as success_rate (successful episodes / total episodes), mean_return, violation_rate, mean_cost, or num_episodes. Keep metric definitions stable so results are comparable across runs.
 
+## Deliverables
+
+> **Must be filled in when Status is Done.**
+
+Output files:
+
+- `runs/icrl/<run_id>/checkpoints/best.pt` — best checkpoint
+- `runs/icrl/<run_id>/eval/<eval_id>/metrics.json` — evaluation metrics
+
+Commands that produced the deliverables (actual shell commands):
+
+```bash
+python scripts/train.py --config configs/icrl_pickplace.yaml --seed 0
+```
+
+Verification commands (to inspect / validate the deliverables):
+
+```bash
+python scripts/eval.py --run_dir runs/icrl/<run_id> --eval_type success
+cat runs/icrl/<run_id>/eval/<eval_id>/metrics.json
+```
+
 ## Acceptance Criteria
 
 This task is complete only when:
@@ -176,7 +198,8 @@ This task is complete only when:
 - [ ] it is reproducible (how to launch is in `run_commands.md`; the actual command / code version / environment / data are written into the corresponding run's `run_config.json`);
 - [ ] the result is written to the correct `runs/` directory and registered in `experiment_results.md`;
 - [ ] required config files and `metrics.json` are generated;
-- [ ] the main result has been checked and marked as meeting or not meeting the Success Criteria.
+- [ ] the main result has been checked and marked as meeting or not meeting the Success Criteria;
+- [ ] the Deliverables section is filled in (output file paths, production commands, verification commands).
 
 ## Blockers
 
