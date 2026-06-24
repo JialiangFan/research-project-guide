@@ -34,6 +34,16 @@ runs/   experiment outputs, training results, evaluation results, and metrics
 - [Docs Management Guide](docs-management.en.md)
 - [Runs Management Guide](runs-management.en.md)
 
+## Skills / 技能
+
+Reusable skills for AI coding agents (Claude Code / Codex) live under `skills/`.
+
+供 AI 编码 agent（Claude Code / Codex）复用的 skill 放在 `skills/` 下。
+
+- [research-task-writer](skills/research-task-writer/) — guides agents to write clear, maintainable, all-Chinese task files under `docs/<project>/tasks/`. See its [README](skills/research-task-writer/README.md) for install and usage.
+
+  指导 agent 在 `docs/<project>/tasks/` 下写出清晰、可维护的**全中文** task 文件。安装与使用见其 [README](skills/research-task-writer/README.md)。
+
 ## Recommended Project Layout / 推荐项目结构
 
 Minimal recommended layout:

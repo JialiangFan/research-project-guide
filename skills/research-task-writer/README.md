@@ -17,19 +17,21 @@ research-task-writer/
 └── README.md                # 本文件（接入说明）
 ```
 
-## 已安装（本机）
+## 安装
 
-源文件在本目录（仓库内，单一真相）。Claude Code 与 Codex 各通过一条软链指向这里——改一处，两边生效。Codex 这台用的是与 Claude Code 相同的 `SKILL.md` 机制（`~/.codex/skills/<name>/SKILL.md`），故对称安装：
+源文件在本目录（仓库内，单一真相）。Claude Code 与 Codex 各通过一条软链指向这里——改一处，两边生效。Codex 用的是与 Claude Code 相同的 `SKILL.md` 机制（`~/.codex/skills/<name>/SKILL.md`），故对称安装。
+
+**在仓库根目录下**执行下面的命令（用 `$(pwd)` 展开成绝对路径，不依赖具体克隆位置）：
 
 ```bash
 # Claude Code（全局发现，任意项目都能触发）
-ln -s /Users/jfan/research-project-guide/skills/research-task-writer ~/.claude/skills/research-task-writer
+ln -s "$(pwd)/skills/research-task-writer" ~/.claude/skills/research-task-writer
 
 # Codex（同样的 SKILL.md 机制）
-ln -s /Users/jfan/research-project-guide/skills/research-task-writer ~/.codex/skills/research-task-writer
+ln -s "$(pwd)/skills/research-task-writer" ~/.codex/skills/research-task-writer
 ```
 
-> 两条软链已在本机建好。skill 在**新会话**启动时被发现；当前已开的会话需重启才会加载。
+> skill 在**新会话**启动时被发现；已开的会话需重启才会加载。在 jfan 本机两条软链已建好。
 
 验证：在任一项目里让 Claude 或 Codex 写/更新 task 文件，确认触发 `research-task-writer` 并产出全中文 task 文件。
 
@@ -40,7 +42,7 @@ ln -s /Users/jfan/research-project-guide/skills/research-task-writer ~/.codex/sk
 ```markdown
 ## 写研究项目 task 文件
 创建/更新 docs/<project>/tasks/ 下的 task 文件时，先读并遵循：
-/Users/jfan/research-project-guide/skills/research-task-writer/SKILL.md（产出全中文，含标题）。
+<本仓库克隆路径>/skills/research-task-writer/SKILL.md（产出全中文，含标题）。
 ```
 
 `SKILL.md` 是纯 markdown、不依赖任何 Claude Code 专有工具名，两边可逐字使用。
