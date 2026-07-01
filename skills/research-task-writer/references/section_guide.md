@@ -218,7 +218,7 @@ def test_schema_verifier_rejects_missing_required_field(tmp_path):
 
 **职责**：交付物表（含真实路径、对应 AC）+ 能跑的产出命令 + 对应 VF 的验证命令。"完成"长什么样在这里定死。
 
-**好的样子**：表格列 `交付物 | 路径 | 对应 AC | 状态 | 产出命令 | 验证命令 | 说明`，诚实标注半成品（`已完成 / Partial / 临时证据`）比一律写"已完成"可信得多。已完成时路径必须指向 `runs/` 真实 artifact。命令分产出（生成）和验证（核对，对应 VF-ID）两类。
+**好的样子**：表格列 `交付物 | 路径 | 对应 AC | 状态 | 产出命令 | 验证命令 | 说明`，诚实标注半成品（`已完成 / Partial / 临时证据`）比一律写"已完成"可信得多。已完成时路径必须指向 `runs/` 真实 artifact。命令分产出（生成）和验证（核对，对应 VF-ID）两类。重型实验 / 仿真任务额外登记**可视化产物**（rollout 视频、渲染帧序列、指标曲线图），给真实路径 + 对应 AC——重型默认项（用户对可视化另有口径时从其）、不是强制 AC，但产生了就该登记，别让 demo 视频散落在 runs/ 里无人指向。
 
 **反例**：
 - 交付物只写"代码和结果"，无路径、无状态、无 AC。
@@ -276,7 +276,7 @@ def test_schema_verifier_rejects_missing_required_field(tmp_path):
 
 **职责**：任务标"已完成"时给出 evidence bundle 摘要，指向 runs/ 原始日志。
 
-**好的样子**：摘要写总验证命令 + exit code + manifest/stdout/stderr/artifact 路径 + git commit/dirty + 每条 AC 的覆盖通过情况；完整日志放 `runs/.../verification/`。只有满足硬条件（全部 AC 有 verifier、关键 verifier 有反例、干净环境一次全绿、证据齐全）才能标"已完成"。
+**好的样子**：摘要写总验证命令 + exit code + manifest/stdout/stderr/artifact 路径 + git commit/dirty + 每条 AC 的覆盖通过情况；完整日志放 `runs/.../verification/`。只有满足硬条件（全部 AC 有 verifier、关键 verifier 有反例、干净环境一次全绿、证据齐全）才能标"已完成"。重型实验任务若有可视化产物（视频 / 渲染帧 / 曲线图），在此一并给出真实路径。
 
 **反例**："状态：已完成。测试已通过。"——没有命令、没有 exit code、没有日志路径，无法复查，等于无证据谎报完成。
 

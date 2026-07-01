@@ -37,7 +37,7 @@
 |---|---|---|---|---|
 | <名称> | `TBD` | AC-1 | 未完成 | |
 
-（路径必须真实或标 TBD；已完成时指向 runs/ 真实 artifact。）
+（路径必须真实或标 TBD；已完成时指向 runs/ 真实 artifact。重型实验 / 仿真任务若产生可观测行为，也把可视化产物——rollout 视频 / 渲染帧 / 指标曲线图——的真实路径登记进本表：默认项、非强制 AC；轻量任务忽略。）
 
 ## 阻塞与边界
 
@@ -60,7 +60,7 @@
 <状态 = 已完成时填；只写摘要，完整日志放 runs/.../verification/>
 
 - 总验证命令：`...`　exit code：0
-- manifest / stdout / stderr / artifact 路径：……
+- manifest / stdout / stderr / artifact 路径：……（含可视化：视频 / 渲染帧 / 曲线图，若有）
 - git commit / dirty：见 `run_config.json`
 - 覆盖：AC-1 通过(VF-1 + NEG-1)；AC-2 通过(VF-2 + NEG-2)……
 

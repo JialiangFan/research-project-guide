@@ -85,6 +85,8 @@ description: >-
 Verifier 设计 / Verifier 反例测试 / AC·CP·VF 覆盖矩阵 / Checkpoint 切片 / 执行约束 / 备注
 ```
 
+> **重型实验 / 仿真任务的可视化（默认项）**：若任务产生可观测行为（policy rollout 视频、渲染帧序列、指标曲线图），默认在「交付物」与「完成证据」登记其**真实可视化路径**，别让 demo 散落在 runs/ 里无人指向。这是重型任务的默认项、不是强制 AC；用户对可视化另有口径时从用户，轻量写作 / 分析任务不要求。
+
 每节怎么写见 `references/section_guide.md`；完整范例（重型 + 轻量）见 `references/examples.md`；可直接复制的模板见 `assets/task_template.md`。
 
 ---
